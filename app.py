@@ -67,10 +67,32 @@ BOTTLE_ML = 500
 
 
 # =========================================================
+# HTML RENDER HELPER
+# =========================================================
+#
+# st.markdown() runs its input through a CommonMark parser before
+# injecting the HTML. Any line indented 4+ spaces that follows a blank
+# line is treated as an "indented code block" and gets rendered as
+# literal text instead of parsed HTML. Our HTML strings below are
+# indented for readability and have blank lines between nested <div>s,
+# which triggers exactly that bug (tags show up as raw text on the
+# page). Flattening to one line before handing it to st.markdown avoids
+# the problem entirely, while keeping the source readable.
+
+def render_html(html: str) -> None:
+    flat = " ".join(
+        line.strip()
+        for line in html.strip().splitlines()
+        if line.strip()
+    )
+    st.markdown(flat, unsafe_allow_html=True)
+
+
+# =========================================================
 # PAGE STYLE
 # =========================================================
 
-st.markdown(
+render_html(
     """
     <style>
 
@@ -222,8 +244,7 @@ st.markdown(
     }
 
     </style>
-    """,
-    unsafe_allow_html=True
+    """
 )
 
 
@@ -231,7 +252,7 @@ st.markdown(
 # HEADER
 # =========================================================
 
-st.markdown(
+render_html(
     """
     <div style="
         font-size:28px;
@@ -240,8 +261,7 @@ st.markdown(
     ">
         🌱 Resource<span style="color:#4ade80;">DNA</span>
     </div>
-    """,
-    unsafe_allow_html=True
+    """
 )
 
 
@@ -249,7 +269,7 @@ st.markdown(
 # HERO
 # =========================================================
 
-st.markdown(
+render_html(
     """
     <div class="main-title">
         Every AI answer has a <span class="green">footprint.</span>
@@ -258,8 +278,7 @@ st.markdown(
     <div class="subtitle">
         See the hidden water, energy and carbon cost of AI.
     </div>
-    """,
-    unsafe_allow_html=True
+    """
 )
 
 
@@ -267,7 +286,7 @@ st.markdown(
 # AI AGENT
 # =========================================================
 
-st.markdown(
+render_html(
     """
     <div class="agent-box">
 
@@ -280,8 +299,7 @@ st.markdown(
         </div>
 
     </div>
-    """,
-    unsafe_allow_html=True
+    """
 )
 
 
@@ -401,13 +419,12 @@ if analyse:
             unsafe_allow_html=True
         )
 
-        st.markdown(
+        render_html(
             f"""
             <div class="result-subtitle">
                 {model} • Estimated {total_tokens:,} tokens
             </div>
-            """,
-            unsafe_allow_html=True
+            """
         )
 
 
@@ -420,7 +437,7 @@ if analyse:
 
         with c1:
 
-            st.markdown(
+            render_html(
                 f"""
                 <div class="metric-box">
 
@@ -439,14 +456,13 @@ if analyse:
                     </div>
 
                 </div>
-                """,
-                unsafe_allow_html=True
+                """
             )
 
 
         with c2:
 
-            st.markdown(
+            render_html(
                 f"""
                 <div class="metric-box">
 
@@ -465,14 +481,13 @@ if analyse:
                     </div>
 
                 </div>
-                """,
-                unsafe_allow_html=True
+                """
             )
 
 
         with c3:
 
-            st.markdown(
+            render_html(
                 f"""
                 <div class="metric-box">
 
@@ -491,14 +506,13 @@ if analyse:
                     </div>
 
                 </div>
-                """,
-                unsafe_allow_html=True
+                """
             )
 
 
         with c4:
 
-            st.markdown(
+            render_html(
                 f"""
                 <div class="metric-box">
 
@@ -517,14 +531,13 @@ if analyse:
                     </div>
 
                 </div>
-                """,
-                unsafe_allow_html=True
+                """
             )
 
 
         with c5:
 
-            st.markdown(
+            render_html(
                 f"""
                 <div class="metric-box">
 
@@ -543,8 +556,7 @@ if analyse:
                     </div>
 
                 </div>
-                """,
-                unsafe_allow_html=True
+                """
             )
 
 
@@ -554,7 +566,7 @@ if analyse:
 
         insight = INSIGHTS[model]
 
-        st.markdown(
+        render_html(
             f"""
             <div class="insight-box">
 
@@ -567,8 +579,7 @@ if analyse:
                 </div>
 
             </div>
-            """,
-            unsafe_allow_html=True
+            """
         )
 
 
@@ -576,7 +587,7 @@ if analyse:
         # RELATABLE COMPARISON
         # =================================================
 
-        st.markdown(
+        render_html(
             f"""
             <div class="comparison-box">
 
@@ -589,8 +600,7 @@ if analyse:
                 <b>{bottle_fraction:.3f}</b> of a 500 mL bottle.
 
             </div>
-            """,
-            unsafe_allow_html=True
+            """
         )
 
 
@@ -679,7 +689,7 @@ if analyse:
 # FOOTER
 # =========================================================
 
-st.markdown(
+render_html(
     """
     <div class="footer">
 
@@ -692,6 +702,5 @@ st.markdown(
         hardware, location and infrastructure.
 
     </div>
-    """,
-    unsafe_allow_html=True
+    """
 )
