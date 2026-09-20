@@ -1,5 +1,10 @@
 import streamlit as st
 import math
+import time
+
+# =========================================================
+# RESOURCE DNA
+# =========================================================
 
 st.set_page_config(
     page_title="ResourceDNA",
@@ -7,9 +12,9 @@ st.set_page_config(
     layout="wide"
 )
 
-# -----------------------------
-# Resource assumptions
-# -----------------------------
+# =========================================================
+# RESOURCE PROFILES
+# =========================================================
 
 PROFILES = {
     "Small Model": {
@@ -39,61 +44,58 @@ PHONE_CHARGE_WH = 12
 BOTTLE_ML = 500
 
 
-# -----------------------------
-# Styling
-# -----------------------------
+# =========================================================
+# PAGE STYLE
+# =========================================================
 
 st.markdown(
     """
     <style>
+
     .stApp {
         background-color: #07110d;
-        color: white;
     }
 
     .block-container {
         max-width: 1100px;
-        padding-top: 2rem;
+        padding-top: 30px;
+        padding-bottom: 40px;
     }
 
-    .brand {
-        font-size: 28px;
+    /* Main title */
+
+    .main-title {
+        font-size: 48px;
         font-weight: 800;
+        text-align: center;
+        margin-top: 40px;
+        margin-bottom: 10px;
         color: white;
     }
 
-    .brand span {
+    .green {
         color: #4ade80;
     }
 
-    .hero {
+    .subtitle {
         text-align: center;
-        padding: 50px 20px 35px;
-    }
-
-    .hero h1 {
-        font-size: 48px;
-        margin-bottom: 10px;
-    }
-
-    .hero h1 span {
-        color: #4ade80;
-    }
-
-    .hero p {
         color: #94a3b8;
         font-size: 18px;
+        margin-bottom: 40px;
     }
 
-    .agent {
+    /* Agent */
+
+    .agent-box {
         background-color: #0d1812;
         border: 1px solid #26372d;
-        border-radius: 20px;
-        padding: 25px;
+        border-radius: 18px;
+        padding: 22px;
         margin-bottom: 20px;
     }
 
-    .agent-title {
+    .agent-name {
+        color: white;
         font-size: 20px;
         font-weight: 700;
     }
@@ -101,50 +103,61 @@ st.markdown(
     .agent-status {
         color: #4ade80;
         font-size: 13px;
+        margin-top: 4px;
     }
+
+    /* Result title */
 
     .result-title {
-        font-size: 28px;
+        color: white;
+        font-size: 30px;
         font-weight: 800;
-        margin-top: 30px;
+        margin-top: 35px;
     }
 
-    .result-sub {
+    .result-subtitle {
         color: #94a3b8;
+        font-size: 14px;
         margin-bottom: 20px;
     }
 
-    .metric-card {
+    /* Metric */
+
+    .metric-box {
         background-color: #0d1812;
         border: 1px solid #26372d;
         border-radius: 18px;
-        padding: 20px;
+        padding: 22px;
         text-align: center;
         min-height: 145px;
     }
 
     .metric-icon {
-        font-size: 25px;
+        font-size: 28px;
     }
 
-    .metric-label {
+    .metric-name {
         color: #94a3b8;
         font-size: 12px;
         margin-top: 8px;
     }
 
     .metric-value {
-        font-size: 28px;
+        color: white;
+        font-size: 27px;
         font-weight: 800;
         margin-top: 5px;
     }
 
-    .metric-note {
+    .metric-description {
         color: #64748b;
         font-size: 11px;
+        margin-top: 5px;
     }
 
-    .insight {
+    /* Insight */
+
+    .insight-box {
         background-color: #102218;
         border: 1px solid #245333;
         border-radius: 18px;
@@ -152,19 +165,22 @@ st.markdown(
         margin-top: 20px;
     }
 
-    .insight-title {
+    .insight-heading {
+        color: #86efac;
         font-size: 17px;
         font-weight: 700;
-        color: #86efac;
     }
 
-    .insight-text {
+    .insight-content {
         color: #cbd5e1;
+        font-size: 15px;
+        line-height: 1.6;
         margin-top: 8px;
-        line-height: 1.5;
     }
 
-    .comparison {
+    /* Comparison */
+
+    .comparison-box {
         background-color: #0d1812;
         border: 1px solid #26372d;
         border-radius: 18px;
@@ -174,11 +190,13 @@ st.markdown(
         font-size: 16px;
     }
 
+    /* Footer */
+
     .footer {
         text-align: center;
         color: #64748b;
-        padding: 35px;
         font-size: 12px;
+        margin-top: 40px;
     }
 
     </style>
@@ -187,57 +205,56 @@ st.markdown(
 )
 
 
-# -----------------------------
-# Header
-# -----------------------------
+# =========================================================
+# HEADER
+# =========================================================
 
 st.markdown(
     """
-    <div class="brand">
-        🌱 Resource<span>DNA</span>
+    <div style="
+        font-size:28px;
+        font-weight:800;
+        color:white;
+    ">
+        🌱 Resource<span style="color:#4ade80;">DNA</span>
     </div>
     """,
     unsafe_allow_html=True
 )
 
 
-# -----------------------------
-# Hero
-# -----------------------------
+# =========================================================
+# HERO
+# =========================================================
 
 st.markdown(
     """
-    <div class="hero">
+    <div class="main-title">
+        Every AI answer has a <span class="green">footprint.</span>
+    </div>
 
-        <h1>
-            Every AI answer has a <span>footprint.</span>
-        </h1>
-
-        <p>
-            ResourceDNA turns the hidden environmental cost of AI
-            into a simple nutrition label.
-        </p>
-
+    <div class="subtitle">
+        See the hidden water, energy and carbon cost of AI.
     </div>
     """,
     unsafe_allow_html=True
 )
 
 
-# -----------------------------
-# Agent
-# -----------------------------
+# =========================================================
+# AI AGENT
+# =========================================================
 
 st.markdown(
     """
-    <div class="agent">
+    <div class="agent-box">
 
-        <div class="agent-title">
+        <div class="agent-name">
             🤖 ResourceDNA Agent
         </div>
 
         <div class="agent-status">
-            ● Ready to analyse
+            ● Ready to analyse your AI request
         </div>
 
     </div>
@@ -246,305 +263,392 @@ st.markdown(
 )
 
 
-# -----------------------------
-# User Input
-# -----------------------------
+# =========================================================
+# INPUT
+# =========================================================
 
-col1, col2 = st.columns([1, 2])
+left, right = st.columns([1, 2])
 
-with col1:
+with left:
 
-    st.subheader("Choose AI model")
+    st.markdown("### 🤖 Choose AI Model")
 
     model = st.selectbox(
-        "AI Model",
-        list(PROFILES.keys())
+        "Model",
+        [
+            "Small Model",
+            "Mid-size Model",
+            "Large Frontier Model",
+            "Image Generation"
+        ],
+        label_visibility="collapsed"
     )
 
 
-with col2:
+with right:
 
-    st.subheader("Enter your prompt")
+    st.markdown("### 💬 Your AI Prompt")
 
     prompt = st.text_area(
         "Prompt",
         placeholder="Example: Explain climate change to a beginner...",
-        height=120
+        height=120,
+        label_visibility="collapsed"
     )
 
 
-# -----------------------------
-# Analyze button
-# -----------------------------
+# =========================================================
+# BUTTON
+# =========================================================
 
-analyze = st.button(
+analyse = st.button(
     "✨ Analyse my AI footprint",
     use_container_width=True
 )
 
 
-# -----------------------------
-# Main calculation
-# -----------------------------
+# =========================================================
+# ANALYSIS
+# =========================================================
 
-if analyze:
+if analyse:
 
-    if prompt.strip() == "":
-        st.warning("Please enter a prompt.")
-        st.stop()
+    if not prompt.strip():
 
-    profile = PROFILES[model]
-
-    # Estimate tokens
-    input_tokens = max(
-        1,
-        math.ceil(len(prompt) / 4)
-    )
-
-    # Assume output is approximately 3x input
-    output_tokens = input_tokens * 3
-
-    total_tokens = input_tokens + output_tokens
-
-    # Energy
-    energy = (
-        total_tokens / 1000
-    ) * profile["energy"]
-
-    # Water
-    water = (
-        total_tokens / 1000
-    ) * profile["water"]
-
-    # Carbon
-    carbon = energy * CARBON_PER_WH
-
-    # Comparisons
-    phone_charges = energy / PHONE_CHARGE_WH
-    bottle_fraction = water / BOTTLE_ML
-
-
-    # -----------------------------
-    # Result
-    # -----------------------------
-
-    st.markdown(
-        '<div class="result-title">🏷️ Your AI Nutrition Label</div>',
-        unsafe_allow_html=True
-    )
-
-    st.markdown(
-        f'<div class="result-sub">'
-        f'Estimated footprint • {model} • {total_tokens:,} tokens'
-        f'</div>',
-        unsafe_allow_html=True
-    )
-
-
-    # -----------------------------
-    # Metrics
-    # -----------------------------
-
-    c1, c2, c3, c4 = st.columns(4)
-
-    with c1:
-        st.markdown(
-            f"""
-            <div class="metric-card">
-                <div class="metric-icon">💧</div>
-                <div class="metric-label">WATER</div>
-                <div class="metric-value">{water:.2f} mL</div>
-                <div class="metric-note">cooling estimate</div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    with c2:
-        st.markdown(
-            f"""
-            <div class="metric-card">
-                <div class="metric-icon">⚡</div>
-                <div class="metric-label">ENERGY</div>
-                <div class="metric-value">{energy:.2f} Wh</div>
-                <div class="metric-note">inference estimate</div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    with c3:
-        st.markdown(
-            f"""
-            <div class="metric-card">
-                <div class="metric-icon">🌍</div>
-                <div class="metric-label">CARBON</div>
-                <div class="metric-value">{carbon:.2f} g</div>
-                <div class="metric-note">CO₂e estimate</div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    with c4:
-        st.markdown(
-            f"""
-            <div class="metric-card">
-                <div class="metric-icon">🔤</div>
-                <div class="metric-label">TOKENS</div>
-                <div class="metric-value">{total_tokens:,}</div>
-                <div class="metric-note">estimated processing</div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-
-    # -----------------------------
-    # AI-style insight
-    # -----------------------------
-
-    if model == "Small Model":
-
-        insight = (
-            "This request is relatively lightweight. "
-            "A small model can handle it with a lower estimated "
-            "resource footprint."
-        )
-
-    elif model == "Mid-size Model":
-
-        insight = (
-            "This is a middle-ground configuration, balancing "
-            "estimated capability with resource consumption."
-        )
-
-    elif model == "Large Frontier Model":
-
-        insight = (
-            "This model has a higher estimated capability, but "
-            "also has a higher resource footprint."
-        )
+        st.warning("Please enter a prompt first.")
 
     else:
 
-        insight = (
-            "Image generation is estimated to require considerably "
-            "more resources than a typical text-generation request."
+        # -----------------------------------------
+        # AI-style analysis
+        # -----------------------------------------
+
+        with st.spinner("🤖 ResourceDNA is analysing your request..."):
+
+            time.sleep(1)
+
+
+        profile = PROFILES[model]
+
+        # -----------------------------------------
+        # Token estimation
+        # -----------------------------------------
+
+        input_tokens = max(
+            1,
+            math.ceil(len(prompt) / 4)
+        )
+
+        output_tokens = input_tokens * 3
+
+        total_tokens = input_tokens + output_tokens
+
+        # -----------------------------------------
+        # Resource calculation
+        # -----------------------------------------
+
+        energy = (
+            total_tokens / 1000
+        ) * profile["energy"]
+
+        water = (
+            total_tokens / 1000
+        ) * profile["water"]
+
+        carbon = (
+            energy * CARBON_PER_WH
+        )
+
+        phone_charges = (
+            energy / PHONE_CHARGE_WH
+        )
+
+        bottle_fraction = (
+            water / BOTTLE_ML
         )
 
 
-    st.markdown(
-        f"""
-        <div class="insight">
+        # =================================================
+        # RESULT
+        # =================================================
 
-            <div class="insight-title">
-                🤖 ResourceDNA Insight
+        st.markdown(
+            '<div class="result-title">🏷️ Your AI Nutrition Label</div>',
+            unsafe_allow_html=True
+        )
+
+        st.markdown(
+            f"""
+            <div class="result-subtitle">
+                {model} • Estimated {total_tokens:,} tokens
             </div>
+            """,
+            unsafe_allow_html=True
+        )
 
-            <div class="insight-text">
-                {insight}
+
+        # =================================================
+        # METRICS
+        # =================================================
+
+        c1, c2, c3, c4 = st.columns(4)
+
+
+        with c1:
+
+            st.markdown(
+                f"""
+                <div class="metric-box">
+
+                    <div class="metric-icon">💧</div>
+
+                    <div class="metric-name">
+                        WATER
+                    </div>
+
+                    <div class="metric-value">
+                        {water:.2f} mL
+                    </div>
+
+                    <div class="metric-description">
+                        cooling estimate
+                    </div>
+
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+
+        with c2:
+
+            st.markdown(
+                f"""
+                <div class="metric-box">
+
+                    <div class="metric-icon">⚡</div>
+
+                    <div class="metric-name">
+                        ENERGY
+                    </div>
+
+                    <div class="metric-value">
+                        {energy:.2f} Wh
+                    </div>
+
+                    <div class="metric-description">
+                        inference estimate
+                    </div>
+
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+
+        with c3:
+
+            st.markdown(
+                f"""
+                <div class="metric-box">
+
+                    <div class="metric-icon">🌍</div>
+
+                    <div class="metric-name">
+                        CARBON
+                    </div>
+
+                    <div class="metric-value">
+                        {carbon:.2f} g
+                    </div>
+
+                    <div class="metric-description">
+                        CO₂e estimate
+                    </div>
+
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+
+        with c4:
+
+            st.markdown(
+                f"""
+                <div class="metric-box">
+
+                    <div class="metric-icon">🔤</div>
+
+                    <div class="metric-name">
+                        TOKENS
+                    </div>
+
+                    <div class="metric-value">
+                        {total_tokens:,}
+                    </div>
+
+                    <div class="metric-description">
+                        estimated processing
+                    </div>
+
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+
+        # =================================================
+        # AI INSIGHT
+        # =================================================
+
+        if model == "Small Model":
+
+            insight = (
+                "This request is relatively lightweight. "
+                "A small model has a lower estimated resource "
+                "footprint for this type of workload."
+            )
+
+        elif model == "Mid-size Model":
+
+            insight = (
+                "This configuration provides a middle ground "
+                "between estimated model capability and resource use."
+            )
+
+        elif model == "Large Frontier Model":
+
+            insight = (
+                "This model category has a higher estimated "
+                "resource footprint than smaller model categories."
+            )
+
+        else:
+
+            insight = (
+                "Image generation is estimated to require "
+                "considerably more resources than typical text requests."
+            )
+
+
+        st.markdown(
+            f"""
+            <div class="insight-box">
+
+                <div class="insight-heading">
+                    🤖 ResourceDNA Insight
+                </div>
+
+                <div class="insight-content">
+                    {insight}
+                </div>
+
             </div>
-
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-
-    # -----------------------------
-    # Simple comparison
-    # -----------------------------
-
-    st.markdown(
-        f"""
-        <div class="comparison">
-
-            📱 Estimated energy:
-            <b>{phone_charges:.2f}</b> phone charges.
-
-            <br><br>
-
-            💧 Estimated water:
-            <b>{bottle_fraction:.3f}</b> of a 500 mL bottle.
-
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-
-    # -----------------------------
-    # Explanation
-    # -----------------------------
-
-    with st.expander("🔎 How did ResourceDNA estimate this?"):
-
-        st.write(
-            f"Your prompt contains approximately "
-            f"{input_tokens:,} input tokens."
-        )
-
-        st.write(
-            f"ResourceDNA estimates approximately "
-            f"{output_tokens:,} output tokens."
-        )
-
-        st.write(
-            "The resource values are calculated using the selected "
-            "model category and its configured resource assumptions."
-        )
-
-        st.write(
-            "Actual AI resource consumption varies by provider, "
-            "hardware, data-centre efficiency, cooling technology, "
-            "location and electricity grid mix."
+            """,
+            unsafe_allow_html=True
         )
 
 
-    # -----------------------------
-    # What-if analysis
-    # -----------------------------
+        # =================================================
+        # RELATABLE COMPARISON
+        # =================================================
 
-    st.divider()
+        st.markdown(
+            f"""
+            <div class="comparison-box">
 
-    st.subheader("🔮 What if you used this prompt repeatedly?")
+                📱 Estimated energy is about
+                <b>{phone_charges:.2f}</b> phone charges.
 
-    daily_queries = st.slider(
-        "Queries per day",
-        min_value=1,
-        max_value=10000,
-        value=100
-    )
+                <br><br>
 
-    daily_energy = energy * daily_queries
-    daily_water = water * daily_queries
-    daily_carbon = carbon * daily_queries
+                💧 Estimated water is about
+                <b>{bottle_fraction:.3f}</b> of a 500 mL bottle.
 
-    q1, q2, q3 = st.columns(3)
-
-    with q1:
-        st.metric(
-            "Daily Energy",
-            f"{daily_energy:.2f} Wh"
-        )
-
-    with q2:
-        st.metric(
-            "Daily Water",
-            f"{daily_water:.2f} mL"
-        )
-
-    with q3:
-        st.metric(
-            "Daily Carbon",
-            f"{daily_carbon:.2f} g"
+            </div>
+            """,
+            unsafe_allow_html=True
         )
 
 
-# -----------------------------
-# Footer
-# -----------------------------
+        # =================================================
+        # EXPLANATION
+        # =================================================
+
+        with st.expander("🔎 How did ResourceDNA calculate this?"):
+
+            st.write(
+                f"Estimated input tokens: {input_tokens:,}"
+            )
+
+            st.write(
+                f"Estimated output tokens: {output_tokens:,}"
+            )
+
+            st.write(
+                "The calculation uses the selected model category "
+                "and its configured resource assumptions."
+            )
+
+            st.write(
+                "These are estimates, not direct measurements. "
+                "Actual resource consumption can vary by provider, "
+                "hardware, data-centre efficiency, cooling technology, "
+                "location and electricity grid mix."
+            )
+
+
+        # =================================================
+        # WHAT-IF
+        # =================================================
+
+        st.divider()
+
+        st.markdown("### 🔮 What if you used this prompt repeatedly?")
+
+        daily_queries = st.slider(
+            "Queries per day",
+            min_value=1,
+            max_value=10000,
+            value=100
+        )
+
+        daily_energy = energy * daily_queries
+        daily_water = water * daily_queries
+        daily_carbon = carbon * daily_queries
+
+
+        q1, q2, q3 = st.columns(3)
+
+
+        with q1:
+
+            st.metric(
+                "Daily Energy",
+                f"{daily_energy:.2f} Wh"
+            )
+
+
+        with q2:
+
+            st.metric(
+                "Daily Water",
+                f"{daily_water:.2f} mL"
+            )
+
+
+        with q3:
+
+            st.metric(
+                "Daily Carbon",
+                f"{daily_carbon:.2f} g"
+            )
+
+
+# =========================================================
+# FOOTER
+# =========================================================
 
 st.markdown(
     """
