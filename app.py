@@ -39,6 +39,28 @@ PROFILES = {
     }
 }
 
+# Insight copy, keyed by model — add a new model here and it's automatically
+# picked up (no if/elif chain to maintain).
+INSIGHTS = {
+    "Small Model": (
+        "This request is relatively lightweight. "
+        "A small model has a lower estimated resource "
+        "footprint for this type of workload."
+    ),
+    "Mid-size Model": (
+        "This configuration provides a middle ground "
+        "between estimated model capability and resource use."
+    ),
+    "Large Frontier Model": (
+        "This model category has a higher estimated "
+        "resource footprint than smaller model categories."
+    ),
+    "Image Generation": (
+        "Image generation is estimated to require "
+        "considerably more resources than typical text requests."
+    ),
+}
+
 CARBON_PER_WH = 0.42
 PHONE_CHARGE_WH = 12
 BOTTLE_ML = 500
@@ -367,6 +389,8 @@ if analyse:
             water / BOTTLE_ML
         )
 
+        quality = profile["quality"]
+
 
         # =================================================
         # RESULT
@@ -391,7 +415,7 @@ if analyse:
         # METRICS
         # =================================================
 
-        c1, c2, c3, c4 = st.columns(4)
+        c1, c2, c3, c4, c5 = st.columns(5)
 
 
         with c1:
@@ -498,39 +522,37 @@ if analyse:
             )
 
 
+        with c5:
+
+            st.markdown(
+                f"""
+                <div class="metric-box">
+
+                    <div class="metric-icon">🎯</div>
+
+                    <div class="metric-name">
+                        QUALITY
+                    </div>
+
+                    <div class="metric-value">
+                        {quality}/100
+                    </div>
+
+                    <div class="metric-description">
+                        model benchmark score
+                    </div>
+
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+
         # =================================================
         # AI INSIGHT
         # =================================================
 
-        if model == "Small Model":
-
-            insight = (
-                "This request is relatively lightweight. "
-                "A small model has a lower estimated resource "
-                "footprint for this type of workload."
-            )
-
-        elif model == "Mid-size Model":
-
-            insight = (
-                "This configuration provides a middle ground "
-                "between estimated model capability and resource use."
-            )
-
-        elif model == "Large Frontier Model":
-
-            insight = (
-                "This model category has a higher estimated "
-                "resource footprint than smaller model categories."
-            )
-
-        else:
-
-            insight = (
-                "Image generation is estimated to require "
-                "considerably more resources than typical text requests."
-            )
-
+        insight = INSIGHTS[model]
 
         st.markdown(
             f"""
@@ -587,7 +609,14 @@ if analyse:
             )
 
             st.write(
-                "The calculation uses the selected model category "
+                "Token counts are approximated as roughly 1 token per "
+                "4 characters, with output assumed to be 3x the input "
+                "length. This is a rough heuristic, not an exact tokenizer "
+                "count — real usage will vary by model and prompt."
+            )
+
+            st.write(
+                "The resource calculation uses the selected model category "
                 "and its configured resource assumptions."
             )
 
@@ -626,7 +655,7 @@ if analyse:
 
             st.metric(
                 "Daily Energy",
-                f"{daily_energy:.2f} Wh"
+                f"{daily_energy:,.2f} Wh"
             )
 
 
@@ -634,7 +663,7 @@ if analyse:
 
             st.metric(
                 "Daily Water",
-                f"{daily_water:.2f} mL"
+                f"{daily_water:,.2f} mL"
             )
 
 
@@ -642,7 +671,7 @@ if analyse:
 
             st.metric(
                 "Daily Carbon",
-                f"{daily_carbon:.2f} g"
+                f"{daily_carbon:,.2f} g"
             )
 
 
