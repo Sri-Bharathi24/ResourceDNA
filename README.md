@@ -166,3 +166,5 @@ This project is created for educational, research, and hackathon purposes.
 PROJECT LINK:
 https://resourcedna-6vygeenr9htkgjzfehbtfa.streamlit.app/
 
+DEMO VIDEO:
+https://docs.google.com/presentation/d/1eKq26FJD6fi1sFMH8aRbNZdpHPBSJlRQ/edit?usp=drive_link&ouid=106318400430418197207&rtpof=true&sd=true
